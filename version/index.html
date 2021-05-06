@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>pdf-stamp-ts</title>
+    <script type="text/javascript" src="../dist/pdfstamp.js"></script>
+  </head>
+
+  <body style="height: 100vh">
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+
+    <div id="root" style="height: 100%"></div>
+
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+    <script>
+      const url =
+        "https://th.bing.com/th/id/Reb00a78481d674e8691e0e981cf01a4f?rik=nH5GEyItQlz%2fkw&riu=http%3a%2f%2fpic12.nipic.com%2f20110222%2f4135415_183459676000_2.jpg&ehk=ZBPQ%2b7bOIoQK8bF6H88DAlQAR%2bm7XxBFOhxERSP0g2g%3d&risl=&pid=ImgRaw";
+
+      const Stamps = [
+        { id: "1", url, width: 40, height: 40 },
+        { id: "2", url, width: 40, height: 40 },
+        { id: "4", url, width: 40, height: 40 },
+      ];
+
+      const pdfUrl = "../dist/111.pdf";
+      fetch(pdfUrl, {  method: "GET" })
+        .then((response) => {
+          return response.arrayBuffer();
+        })
+        .then((data) => {
+          const file = { data: data };
+          window.renderPDFStamp(document.getElementById("root"), {
+            file: file,
+            stamps: Stamps,
+            onConfirm(stamps) {
+              console.log(stamps);
+            },
+            onCancel() {
+              console.log("取消");
+            },
+            onPassword(stamp, callback) {
+              Promise.resolve().then(() => {
+                prompt("请输入密码--" + stamp.id);
+                callback();
+              });
+            },
+          });
+        });
+    </script>
+  </body>
+</html>
