@@ -51,16 +51,27 @@
         { id: "4", url, width: 40, height: 40 },
       ];
 
-      const pdfUrl = "../dist/111.pdf";
-      fetch(pdfUrl, {  method: "GET" })
+      const pdfUrl = "./文件和电子签章json数据.json";
+      fetch(pdfUrl, { method: "GET" })
         .then((response) => {
-          return response.arrayBuffer();
+          return response.json();
         })
-        .then((data) => {
-          const file = { data: data };
+        .then((response) => {
+          return response.result;
+        })
+        .then((result) => {
+          const pdfFile = `data:application/pdf;base64,${result.file.fileMemory}`;
+          const stamps = result.signets.map(img => {
+            return {
+              id: img.id,
+              height: img.height,
+              width: img.width,
+              url:`data:image/png;base64,${img.image}`
+            }
+          })
           window.renderPDFStamp(document.getElementById("root"), {
-            file: file,
-            stamps: Stamps,
+            file: pdfFile,
+            stamps: stamps,
             onConfirm(stamps) {
               console.log(stamps);
             },
