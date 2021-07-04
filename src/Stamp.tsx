@@ -100,6 +100,7 @@ export function StampLayer({
       let x = dragRect.x - rect.left,
         y = dragRect.y - rect.top;
       [x, y] = viewport.convertToPdfPoint(x, y);
+      y = y - item.height
       const type = monitor.getItemType();
       if (type === "add-stamp") {
         dispath({
@@ -187,7 +188,7 @@ function StampOnPDFItem({
   const imgRef = React.useRef<HTMLImageElement | null>(null);
   const [left, top] = viewport.convertToViewportPoint(
     stampOnPdf.x,
-    stampOnPdf.y
+    stampOnPdf.y + stamp.height
   );
   const style: React.CSSProperties = {
     position: "absolute",

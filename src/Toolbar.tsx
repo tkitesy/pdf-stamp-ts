@@ -5,7 +5,7 @@ import { usePDFView } from "./PDFView";
 import { useFinalStampsOnPdf, useStoreCallbacks } from "./Store";
 
 export function Toolbar(props: any) {
-  const { scale, setScale } = usePDFView();
+  const { realScale: scale, setScale } = usePDFView();
   const { currentPage, scrollTo } = usePageNavigation();
   const [editingPageNumber, setEditingPageNumber] = React.useState(1);
   const pdf = usePDF();
