@@ -7,10 +7,11 @@ import { PageNavigation, usePageNavigation } from "./PageNavigation";
 import { PDFLoader, usePDF } from "./PdfLoader";
 import { PDFView } from "./PDFView";
 import { PDFViewPort } from "./PDFViewPort";
-import { StampContainer, StampProvider } from "./Stamp";
+import { StampContainer, StampProvider, ExtraButtons } from "./Stamp";
 import { StoreProvider } from "./Store";
 import { ThumbItem } from "./ThumbItem";
 import { Toolbar } from "./Toolbar";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `pdf.worker.js`;
 
 const url = `https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf`;
@@ -60,8 +61,10 @@ function PdfStamp(props: any) {
                       <Thumbnails />
                     </div>
                     <MyPage />
+                    <DefaultView defaultPage={props.options?.defaultPage} />
                     <div className={"stamp-container"}>
                       <StampContainer />
+                      <ExtraButtons />
                     </div>
                   </PdfPageContainer>
                 </StampProvider>
@@ -72,6 +75,18 @@ function PdfStamp(props: any) {
       </div>
     </StoreProvider>
   );
+}
+
+function DefaultView(props: any) {
+  const { scrollTo } = usePageNavigation();
+  React.useLayoutEffect(() => {
+    console.log(props.defaultPage);
+
+    if (props.defaultPage !== undefined && props.defaultPage > 0) {
+      setTimeout(() => scrollTo(props.defaultPage - 1), 10);
+    }
+  }, []);
+  return null;
 }
 
 const StyledPdfStamp = styled(PdfStamp)`

@@ -61,16 +61,17 @@
         })
         .then((result) => {
           const pdfFile = `data:application/pdf;base64,${result.file.fileMemory}`;
-          const stamps = result.signets.map(img => {
+          const stamps = result.signets.map((img) => {
             return {
               id: img.id,
               height: img.height,
               width: img.width,
-              url:`data:image/png;base64,${img.image}`
-            }
-          })
+              url: `data:image/png;base64,${img.image}`,
+            };
+          });
           window.renderPDFStamp(document.getElementById("root"), {
             file: pdfFile,
+            defaultPage: 2,
             stamps: stamps,
             onConfirm(stamps) {
               console.log(stamps);
@@ -84,6 +85,17 @@
                 callback();
               });
             },
+            getExtraButtons() {
+              const button = document.createElement("button")
+              button.textContent = "签字1"
+              button.addEventListener("click", () => {alert("签字")})
+              return [button];
+            },
+            btnGotoText: "跳转1",
+            btnConfirmText: "确认1",
+            btnCancelText: "取消1",
+            btnStampConfirmText: "确认1",
+            btnStampRemoveText: "删除1",
           });
         });
     </script>

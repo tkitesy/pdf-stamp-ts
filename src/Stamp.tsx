@@ -51,6 +51,30 @@ const StyledStampItem = styled(StampItem)`
   }
 `;
 
+export function ExtraButtons() {
+  const containerRef = React.useRef<HTMLImageElement | null>(null);
+  const callbacks = useStoreCallbacks();
+  React.useEffect(() => {
+    const extraButtons = callbacks.getExtraButtons();
+    if (containerRef.current) {
+      while (containerRef.current.lastChild) {
+        containerRef.current.removeChild(containerRef.current.lastChild);
+      }
+      if (extraButtons) {
+        if (Array.isArray(extraButtons)) {
+          for (let btn of extraButtons) {
+            containerRef.current.appendChild(btn);
+          }
+        } else {
+          containerRef.current.appendChild(extraButtons);
+        }
+      }
+    }
+  }, []);
+
+  return <div className="stamp-extra-buttons-box" ref={containerRef}></div>;
+}
+
 export function StampContainer() {
   const stamps = useStamps();
   return (
@@ -100,8 +124,9 @@ export function StampLayer({
       let x = dragRect.x - rect.left,
         y = dragRect.y - rect.top;
       [x, y] = viewport.convertToPdfPoint(x, y);
-      y = y - item.height
+      y = y - item.height;
       const type = monitor.getItemType();
+      const { id: refStampId, ...rest } = item;
       if (type === "add-stamp") {
         dispath({
           type: "add-stamp",
@@ -110,7 +135,8 @@ export function StampLayer({
             x,
             y,
             pageNumber: pageIndex + 1,
-            refStampId: item.id,
+            refStampId,
+            ...rest,
             confirmed: false,
           },
         });
@@ -293,8 +319,8 @@ function StampOnPDFItem({
       ></img>
 
       <div className={`stamp-on-pdf-btn-box`} style={boxStyle}>
-        <button onClick={handleConfirm}>确认</button>
-        <button onClick={handleRemove}>删除</button>
+        <button onClick={handleConfirm}>{callbacks.btnStampConfirmText}</button>
+        <button onClick={handleRemove}>{callbacks.btnStampRemoveText}</button>
       </div>
     </React.Fragment>
   );

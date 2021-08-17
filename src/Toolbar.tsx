@@ -67,16 +67,16 @@ export function Toolbar(props: any) {
           />{" "}
           / <span className="total-page-label">{pdf.numPages}</span>
           <button className={"goto-btn"} onClick={goto}>
-            跳转
+            {callbacks.btnGotoText}
           </button>
         </span>
       </div>
       <div className="right-box">
         <button className="confirm-btn" onClick={handleConfirm}>
-          确认
+          {callbacks.btnConfirmText}
         </button>
         <button className="cancel-btn" onClick={handleCancel}>
-          取消
+          {callbacks.btnCancelText}
         </button>
       </div>
     </div>
