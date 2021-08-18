@@ -16,8 +16,7 @@ interface Props {
   pageIndex: number
 }
 export function PageLayer({ pageIndex }: Props) {
-  console.log("page render" + pageIndex);
-  
+   
   const pdf = usePDF()
   const {
     pageVisibilityChanged,
@@ -38,7 +37,6 @@ export function PageLayer({ pageIndex }: Props) {
   const [rendered, setRendered] = React.useState(false)
 
   React.useLayoutEffect(() => {
-    console.log("page register" + pageIndex);
     registerPage(pageIndex, containerRef.current)
     return () => {
       unregisterPage(pageIndex)

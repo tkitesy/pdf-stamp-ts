@@ -80,8 +80,6 @@ function PdfStamp(props: any) {
 function DefaultView(props: any) {
   const { scrollTo } = usePageNavigation();
   React.useLayoutEffect(() => {
-    console.log(props.defaultPage);
-
     if (props.defaultPage !== undefined && props.defaultPage > 0) {
       setTimeout(() => scrollTo(props.defaultPage - 1), 10);
     }
